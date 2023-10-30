@@ -1,4 +1,5 @@
 const express=require('express')
+const { blogs } = require('./model/index')
 const app=express()
 
 // database connection
@@ -15,13 +16,27 @@ app.get("/",(req,res)=>{
    res.render("blogs.ejs")
    
 })
-app.get("/createBlog",(req,res)=>{
+
+app.get("/createBlog", (req,res)=>{
     res.render("createblog.ejs")
 })
 
 // createBlog post
-app.post("/createBlog",(req,res)=>{
-    console.log(req.body)
+app.post("/createBlog",async (req,res)=>{
+    
+    const title = req.body.title
+    const description =req.body.description
+    const subTitle = req.body.subtitle
+
+    await blogs.create({
+        title :title,
+        subTitle : subTitle,
+        description : description
+    })
+    // //next method
+    // const{title,description,subtitle} =req.body
+    res.send("Form submitted succesfully")
+    
 })
 
 app.listen(3000,function(){
