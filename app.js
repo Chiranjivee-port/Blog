@@ -6,8 +6,7 @@ const app=express()
 require("./model/index")
 
 
-app.set("view engine","ejs")
-  
+app.set("view engine","ejs")  
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
@@ -26,7 +25,7 @@ app.get("/createBlog", (req,res)=>{
     res.render("createblog.ejs")
 })
 
-// createBlog post
+//createBlog post
 app.post("/createBlog",async (req,res)=>{
 
     const title = req.body.title
@@ -45,6 +44,23 @@ app.post("/createBlog",async (req,res)=>{
     res.redirect("/")
     
     //data base bata data nikalney
+})
+ 
+
+//single blog post here 
+app.get("/single/:id",async(req,res)=>{
+    const id = req.params.id  //user leh deko :id ko data extract gareko
+//     second approach 
+// const{id} = req.params
+
+const blog = await blogs.findAll({   // table bata id ko data query garne
+    where:{
+        id :id
+    }
+})
+ //second finding  approach 
+// const blog= await blogs.findByPk(id)
+    res.render("singleBlog.ejs",{blog:blog})
 })
 
 app.listen(3000,function(){
